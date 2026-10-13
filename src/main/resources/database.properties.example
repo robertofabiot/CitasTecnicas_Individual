@@ -1,0 +1,9 @@
+# =============================================================================
+# Configuracion de Conexion a Base de Datos - NeonDB / PostgreSQL
+# TecnoAsistencia Nicaragua S.A.
+# =============================================================================
+# Instrucciones:
+# 1. Copia este archivo como 'database.properties' si aun no existe en esta carpeta.
+# 2. Pega tu cadena de conexion de NeonDB en 'db.url' o completa los campos individuales.
+#
+# db.url=jdbc:postgresql://ep-silent-wave-a5xxxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
