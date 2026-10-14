@@ -1,5 +1,6 @@
 package com.example.evaluacion_javafx_citastecnicas;
 
+import com.example.evaluacion_javafx_citastecnicas.dao.ClienteDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
