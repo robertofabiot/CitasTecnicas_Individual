@@ -44,16 +44,38 @@ public class Cliente {
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }
 
+    /**
+     * Retorna el nombre completo concatenado (nombres + apellidos).
+     * Utilizado para TableViews y ComboBox en JavaFX (RF04).
+     */
+    public String getNombreCompleto() {
+        String n = nombres != null ? nombres.trim() : "";
+        String a = apellidos != null ? apellidos.trim() : "";
+        return (n + " " + a).trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        if (id > 0 && cliente.id > 0) {
+            return id == cliente.id;
+        }
+        return java.util.Objects.equals(correo, cliente.correo);
+    }
+
+    @Override
+    public int hashCode() {
+        return id > 0 ? java.util.Objects.hash(id) : java.util.Objects.hash(correo);
+    }
 
     @Override
     public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nombres='" + nombres + '\'' +
-                ", apellidos='" + apellidos + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", correo='" + correo + '\'' +
-                ", activo=" + activo +
-                '}';
+        String nombre = getNombreCompleto();
+        if (nombre.isEmpty()) {
+            return correo != null ? correo : "Cliente #" + id;
+        }
+        return nombre + (correo != null && !correo.isBlank() ? " (" + correo + ")" : "");
     }
 }
