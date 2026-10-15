@@ -1,14 +1,18 @@
 package com.example.evaluacion_javafx_citastecnicas;
 
+import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 /** Utilidades compartidas: teclado, diálogos y JDBC fuera del hilo de JavaFX. */
 public final class Ui {
@@ -58,6 +62,35 @@ public final class Ui {
         alert.getDialogPane().setContent(texto);
         alert.setResizable(true);
         alert.showAndWait();
+    }
+
+    public static <T> void ejecutar(Node root, Callable<T> trabajo, Consumer<T> terminado) {
+        root.setDisable(true);
+        Task<T> tarea = new Task<>() {
+            @Override protected T call() throws Exception { return trabajo.call(); }
+        };
+        tarea.setOnSucceeded(e -> {
+            root.setDisable(false);
+            terminado.accept(tarea.getValue());
+        });
+        tarea.setOnFailed(e -> {
+            root.setDisable(false);
+            Throwable error = tarea.getException();
+            if (error instanceof IllegalArgumentException) {
+                error(root, error.getMessage());
+            } else if (error instanceof SQLException sql) {
+                String estado = sql.getSQLState();
+                String mensaje = estado != null && estado.startsWith("08")
+                        ? "No hay conexión con PostgreSQL. Revise su conexión de red y database.properties."
+                        : "PostgreSQL no pudo completar la operación. Revise la conexión y las tablas de la base de datos.";
+                error(root, mensaje + (estado == null ? "" : " Código SQL: " + estado));
+            } else {
+                error(root, "Ocurrió un error inesperado al procesar los datos.");
+            }
+        });
+        Thread hilo = new Thread(tarea, "consulta-postgresql");
+        hilo.setDaemon(true);
+        hilo.start();
     }
 
     public static void configurarFecha(DatePicker picker) {
