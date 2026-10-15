@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:id="root" fx:controller="com.example.evaluacion_javafx_citastecnicas.ClientesController">
+ <top><VBox><ToolBar><Label text="TecnoAsistencia"><font><Font name="System Bold" size="16"/></font></Label><Region HBox.hgrow="ALWAYS"/><Button text="Inicio" onAction="#irInicio" disable="false" minWidth="100"/><Button text="Clientes" onAction="#irClientes" disable="true" minWidth="100"/><Button text="Citas" onAction="#irCitas" disable="false" minWidth="100"/></ToolBar></VBox></top>
+ <center><VBox>
+  <fx:include fx:id="clienteForm" source="cliente-form.fxml"/>
+  <Separator/>
+  <VBox spacing="10" VBox.vgrow="ALWAYS"><padding><Insets top="16" right="24" bottom="18" left="24"/></padding>
+   <Label text="Clientes registrados"><font><Font name="System Bold" size="18"/></font></Label>
+   <HBox spacing="10" alignment="CENTER_LEFT"><Label text="Buscar" labelFor="$busqueda"/><TextField fx:id="busqueda" promptText="Nombres, apellidos o correo" onAction="#buscar" HBox.hgrow="ALWAYS"/><Button text="Buscar" onAction="#buscar"/><Button text="Mostrar todos" onAction="#limpiarBusqueda"/></HBox>
+   <TableView fx:id="tabla" VBox.vgrow="ALWAYS" minHeight="150" prefHeight="240">
+    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+    <placeholder><Label text="No hay clientes para mostrar."/></placeholder><columns><TableColumn fx:id="idCol" text="ID" prefWidth="60"/><TableColumn fx:id="nombreCol" text="Nombre completo" prefWidth="290"/><TableColumn fx:id="telefonoCol" text="Teléfono" prefWidth="145"/><TableColumn fx:id="correoCol" text="Correo" prefWidth="300"/><TableColumn fx:id="activoCol" text="Estado" prefWidth="105"/></columns>
+   </TableView>
+   <HBox alignment="CENTER_LEFT" spacing="10"><Label fx:id="resumen" text="Cargando registros…"/><Region HBox.hgrow="ALWAYS"/><Button fx:id="verDetalles" text="Ver detalles"/><Button fx:id="editar" text="Editar seleccionado"/></HBox>
+   <Label text="Un clic: seleccionar · Doble clic: detalles · Clic derecho: editar o eliminar"/>
+  </VBox>
+ </VBox></center>
+</BorderPane>

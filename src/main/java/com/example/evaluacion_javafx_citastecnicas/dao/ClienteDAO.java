@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * DAO de la entidad Cliente.
@@ -22,9 +23,10 @@ import java.util.List;
  */
 public class ClienteDAO {
 
-    // Regex basico de correo: algo@algo.algo
-    private static final String REGEX_CORREO =
-            "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    // Formato básico: sin espacios, puntos consecutivos ni dominios mal formados.
+    private static final Pattern REGEX_CORREO = Pattern.compile(
+            "^[A-Za-z0-9_%+-]+(?:\\.[A-Za-z0-9_%+-]+)*@"
+            + "(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z]{2,}$");
 
     // VALIDACIONES
 
@@ -54,7 +56,7 @@ public class ClienteDAO {
         if (c.getCorreo() == null || c.getCorreo().trim().isEmpty()) {
             throw new IllegalArgumentException("El campo 'Correo' es obligatorio.");
         }
-        if (!c.getCorreo().trim().matches(REGEX_CORREO)) {
+        if (!REGEX_CORREO.matcher(c.getCorreo().trim()).matches()) {
             throw new IllegalArgumentException("El correo no tiene un formato valido (ejemplo@dominio.com).");
         }
         if (c.getCorreo().trim().length() > 120) {

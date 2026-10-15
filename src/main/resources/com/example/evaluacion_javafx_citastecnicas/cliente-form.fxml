@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:id="formulario" fx:controller="com.example.evaluacion_javafx_citastecnicas.ClienteFormController" spacing="14">
+ <padding><Insets top="20" right="24" bottom="18" left="24"/></padding>
+ <Label fx:id="titulo" text="Registrar cliente"><font><Font name="System Bold" size="22"/></font></Label>
+ <GridPane hgap="16" vgap="10">
+  <columnConstraints><ColumnConstraints minWidth="130" halignment="RIGHT"/><ColumnConstraints hgrow="ALWAYS" fillWidth="true"/></columnConstraints>
+  <Label text="Nombres *" labelFor="$nombres" GridPane.rowIndex="0" GridPane.columnIndex="0"/><TextField fx:id="nombres" promptText="Ej.: María Elena" GridPane.rowIndex="0" GridPane.columnIndex="1"/><Label text="Apellidos *" labelFor="$apellidos" GridPane.rowIndex="1" GridPane.columnIndex="0"/><TextField fx:id="apellidos" promptText="Ej.: Ramírez López" GridPane.rowIndex="1" GridPane.columnIndex="1"/><Label text="Teléfono *" labelFor="$telefono" GridPane.rowIndex="2" GridPane.columnIndex="0"/><TextField fx:id="telefono" promptText="Ej.: 8888-1111" GridPane.rowIndex="2" GridPane.columnIndex="1"/><Label text="Correo *" labelFor="$correo" GridPane.rowIndex="3" GridPane.columnIndex="0"/><TextField fx:id="correo" promptText="nombre@dominio.com" GridPane.rowIndex="3" GridPane.columnIndex="1"/><Label text="Estado" labelFor="$activo" GridPane.rowIndex="4" GridPane.columnIndex="0"/><CheckBox fx:id="activo" text="Cliente activo" selected="true" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+ </GridPane>
+ <HBox spacing="10" alignment="CENTER_RIGHT"><Label text="Enter: siguiente campo"/><Region HBox.hgrow="ALWAYS"/><Button text="Limpiar campos" onAction="#limpiar"/><Button fx:id="guardar" text="Guardar cliente" onAction="#guardar" minWidth="140"/></HBox>
+</VBox>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:id="formulario" fx:controller="com.example.evaluacion_javafx_citastecnicas.CitaFormController" spacing="14">
+ <padding><Insets top="20" right="24" bottom="18" left="24"/></padding>
+ <Label fx:id="titulo" text="Registrar cita técnica"><font><Font name="System Bold" size="22"/></font></Label>
+ <GridPane hgap="16" vgap="10">
+  <columnConstraints><ColumnConstraints minWidth="130" halignment="RIGHT"/><ColumnConstraints hgrow="ALWAYS" fillWidth="true"/></columnConstraints>
+  <Label text="Cliente *" labelFor="$cliente" GridPane.rowIndex="0" GridPane.columnIndex="0"/><ComboBox fx:id="cliente" promptText="Seleccione un cliente" editable="false" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="1"/><Label text="Fecha *" labelFor="$fecha" GridPane.rowIndex="1" GridPane.columnIndex="0"/><DatePicker fx:id="fecha" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="1"/><Label text="Hora *" labelFor="$hora" GridPane.rowIndex="2" GridPane.columnIndex="0"/><TextField fx:id="hora" promptText="HH:mm · Ej.: 14:30" GridPane.rowIndex="2" GridPane.columnIndex="1"/><Label text="Tipo de servicio *" labelFor="$servicio" GridPane.rowIndex="3" GridPane.columnIndex="0"/><ComboBox fx:id="servicio" promptText="Seleccione un servicio" editable="false" maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="1"/><Label text="Descripción *" labelFor="$descripcion" GridPane.rowIndex="4" GridPane.columnIndex="0"/><TextArea fx:id="descripcion" promptText="Equipo y motivo de la atención (máximo 255 caracteres)" wrapText="true" prefRowCount="2" prefHeight="60" GridPane.rowIndex="4" GridPane.columnIndex="1"/><Label text="Estado *" labelFor="$estado" GridPane.rowIndex="5" GridPane.columnIndex="0"/><ComboBox fx:id="estado" editable="false" maxWidth="Infinity" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+ </GridPane>
+ <HBox spacing="10" alignment="CENTER_RIGHT"><Label text="Enter: siguiente campo"/><Region HBox.hgrow="ALWAYS"/><Button text="Limpiar campos" onAction="#limpiar"/><Button fx:id="guardar" text="Guardar cita" onAction="#guardar" minWidth="140"/></HBox>
+</VBox>
