@@ -38,6 +38,10 @@ public class CitaTecnicaDAO {
      * Lanza IllegalArgumentException si alguna regla no se cumple.
      */
     public void validarCita(CitaTecnica cita) {
+        validarCita(cita, null);
+    }
+
+    private void validarCita(CitaTecnica cita, LocalDate fechaOriginal) {
         if (cita == null) {
             throw new IllegalArgumentException("La cita tecnica no puede ser nula.");
         }
@@ -46,6 +50,9 @@ public class CitaTecnicaDAO {
         }
         if (cita.getFecha() == null) {
             throw new IllegalArgumentException("La fecha de la cita es obligatoria.");
+        }
+        if (cita.getFecha().isBefore(LocalDate.now()) && !cita.getFecha().equals(fechaOriginal)) {
+            throw new IllegalArgumentException("No se pueden agendar citas para antes del día actual.");
         }
         if (cita.getHora() == null) {
             throw new IllegalArgumentException("La hora de la cita es obligatoria.");
@@ -231,7 +238,14 @@ public class CitaTecnicaDAO {
         if (cita == null || cita.getId() <= 0) {
             throw new IllegalArgumentException("La cita a actualizar debe tener un ID valido mayor a 0.");
         }
-        validarCita(cita);
+        // Una cita histórica puede cambiar de estado conservando su fecha original.
+        LocalDate fechaOriginal = null;
+        if (cita.getFecha() != null && cita.getFecha().isBefore(LocalDate.now())) {
+            CitaTecnica original = obtenerPorId(cita.getId());
+            if (original == null) return false;
+            fechaOriginal = original.getFecha();
+        }
+        validarCita(cita, fechaOriginal);
 
         String sql = "UPDATE cita_tecnica SET cliente_id = ?, fecha = ?, hora = ?, " +
                 "tipo_servicio = ?, descripcion = ?, estado = ? " +

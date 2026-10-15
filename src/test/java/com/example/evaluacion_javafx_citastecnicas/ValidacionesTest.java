@@ -2,6 +2,10 @@ package com.example.evaluacion_javafx_citastecnicas;
 
 import com.example.evaluacion_javafx_citastecnicas.dao.ClienteDAO;
 import com.example.evaluacion_javafx_citastecnicas.model.Cliente;
+import com.example.evaluacion_javafx_citastecnicas.dao.CitaTecnicaDAO;
+import com.example.evaluacion_javafx_citastecnicas.model.CitaTecnica;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,5 +20,12 @@ class ValidacionesTest {
         }
         c.setCorreo("nombre.apellido+etiqueta@sub.dominio.com");
         assertDoesNotThrow(() -> dao.validarCliente(c));
+    }
+
+    @Test void daoRechazaFechasPasadasYPermiteAgendarHoy() {
+        CitaTecnica cita = new CitaTecnica(1, LocalDate.now().minusDays(1), LocalTime.NOON, "Soporte Remoto", "Equipo", "Pendiente");
+        assertThrows(IllegalArgumentException.class, () -> new CitaTecnicaDAO().validarCita(cita));
+        cita.setFecha(LocalDate.now());
+        assertDoesNotThrow(() -> new CitaTecnicaDAO().validarCita(cita));
     }
 }
