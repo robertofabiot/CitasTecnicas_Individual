@@ -2,11 +2,20 @@ package com.example.evaluacion_javafx_citastecnicas;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Window;
+import javafx.util.StringConverter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 
 /** Utilidades compartidas: teclado, diálogos y JDBC fuera del hilo de JavaFX. */
 public final class Ui {
     private Ui() { }
+    private static final DateTimeFormatter FECHA = DateTimeFormatter.ofPattern("dd/MM/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
+
     public static Window ventana(Node node) {
         return node.getScene() == null ? null : node.getScene().getWindow();
     }
@@ -49,6 +58,53 @@ public final class Ui {
         alert.getDialogPane().setContent(texto);
         alert.setResizable(true);
         alert.showAndWait();
+    }
+
+    public static void configurarFecha(DatePicker picker) {
+        picker.setPromptText("dd/mm/aaaa");
+        picker.setConverter(new StringConverter<>() {
+            @Override public String toString(LocalDate fecha) { return fecha == null ? "" : FECHA.format(fecha); }
+            @Override public LocalDate fromString(String valor) {
+                if (valor == null || valor.isBlank()) return null;
+                try { return LocalDate.parse(valor.trim(), FECHA); }
+                catch (RuntimeException e) { throw new IllegalArgumentException("Ingrese una fecha válida con formato dd/mm/aaaa."); }
+            }
+        });
+    }
+
+    public static LocalDate leerFecha(DatePicker picker) {
+        LocalDate fecha = picker.getConverter().fromString(picker.getEditor().getText());
+        picker.setValue(fecha);
+        return fecha;
+    }
+
+    /** Enter avanza; Espacio cambia el CheckBox; Shift+Enter conserva saltos en TextArea. */
+    public static void flujo(Node... controles) {
+        for (int i = 0; i < controles.length - 1; i++) {
+            Node actual = controles[i];
+            Node siguiente = controles[i + 1];
+            actual.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                if (event.getCode() != KeyCode.ENTER || event.isShiftDown()) return;
+                // El desplegable debe poder confirmar primero su opción con el comportamiento nativo.
+                if (actual instanceof ComboBoxBase<?> combo && combo.isShowing()) return;
+                event.consume();
+            });
+            actual.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+                if (event.getCode() != KeyCode.ENTER || event.isShiftDown()) return;
+                if (actual instanceof ComboBoxBase<?> combo && combo.isShowing()) return;
+                // Avanzar al soltar evita que el siguiente control procese el mismo Enter.
+                event.consume();
+                avanzar(actual, siguiente);
+            });
+        }
+    }
+
+    private static void avanzar(Node actual, Node siguiente) {
+        if (actual instanceof DatePicker picker) {
+            try { leerFecha(picker); }
+            catch (IllegalArgumentException e) { error(actual, e.getMessage()); picker.requestFocus(); return; }
+        }
+        siguiente.requestFocus();
     }
 
 }
