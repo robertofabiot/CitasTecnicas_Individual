@@ -1,10 +1,12 @@
 package com.example.evaluacion_javafx_citastecnicas;
 
+import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import java.sql.SQLException;
@@ -140,4 +142,36 @@ public final class Ui {
         siguiente.requestFocus();
     }
 
+    public static <T> void configurarTabla(TableView<T> tabla, Button detalles, Button editar,
+                                            Consumer<T> ver, Consumer<T> cambiar, Consumer<T> borrar) {
+        detalles.disableProperty().bind(tabla.getSelectionModel().selectedItemProperty().isNull());
+        editar.disableProperty().bind(tabla.getSelectionModel().selectedItemProperty().isNull());
+        detalles.setOnAction(e -> ver.accept(tabla.getSelectionModel().getSelectedItem()));
+        editar.setOnAction(e -> cambiar.accept(tabla.getSelectionModel().getSelectedItem()));
+        tabla.setRowFactory(t -> {
+            TableRow<T> fila = new TableRow<>();
+            MenuItem verItem = new MenuItem("Ver detalles");
+            MenuItem editarItem = new MenuItem("Editar");
+            MenuItem borrarItem = new MenuItem("Eliminar");
+            verItem.setOnAction(e -> ver.accept(fila.getItem()));
+            editarItem.setOnAction(e -> cambiar.accept(fila.getItem()));
+            borrarItem.setOnAction(e -> borrar.accept(fila.getItem()));
+            ContextMenu menu = new ContextMenu(verItem, editarItem, new SeparatorMenuItem(), borrarItem);
+            fila.contextMenuProperty().bind(Bindings.when(fila.emptyProperty())
+                    .then((ContextMenu) null).otherwise(menu));
+            fila.setOnContextMenuRequested(e -> {
+                if (!fila.isEmpty()) tabla.getSelectionModel().select(fila.getItem());
+            });
+            fila.setOnMouseClicked(e -> {
+                if (!fila.isEmpty() && e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2)
+                    ver.accept(fila.getItem());
+            });
+            return fila;
+        });
+        tabla.setOnKeyPressed(e -> {
+            T item = tabla.getSelectionModel().getSelectedItem();
+            if (item != null && e.getCode() == KeyCode.ENTER) { ver.accept(item); e.consume(); }
+            else if (item != null && e.getCode() == KeyCode.F2) { cambiar.accept(item); e.consume(); }
+        });
+    }
 }
