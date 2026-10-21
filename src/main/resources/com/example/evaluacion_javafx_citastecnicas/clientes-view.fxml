@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:id="root" fx:controller="com.example.evaluacion_javafx_citastecnicas.ClientesController">
- <top><VBox><ToolBar><Label text="TecnoAsistencia"><font><Font name="System Bold" size="16"/></font></Label><Region HBox.hgrow="ALWAYS"/><Button text="Inicio" onAction="#irInicio" disable="false" minWidth="100"/><Button text="Clientes" onAction="#irClientes" disable="true" minWidth="100"/><Button text="Citas" onAction="#irCitas" disable="false" minWidth="100"/></ToolBar></VBox></top>
+ <top><VBox><ToolBar><Label text="TecnoAsistencia"><font><Font name="System Bold" size="16"/></font></Label><Region HBox.hgrow="ALWAYS"/><Button text="Inicio" onAction="#irInicio" disable="false" minWidth="100"/><Button text="Clientes" onAction="#irClientes" disable="true" minWidth="100"/><Button text="Citas" onAction="#irCitas" disable="false" minWidth="100"/><Button text="Procesos" onAction="#irProcesos" disable="false" minWidth="100"/></ToolBar></VBox></top>
  <center><VBox>
   <fx:include fx:id="clienteForm" source="cliente-form.fxml"/>
   <Separator/>

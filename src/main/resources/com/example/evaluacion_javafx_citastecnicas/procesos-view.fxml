@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:id="root" fx:controller="com.example.evaluacion_javafx_citastecnicas.ProcesosController">
+ <top>
+  <VBox>
+   <ToolBar>
+    <Label text="TecnoAsistencia"><font><Font name="System Bold" size="16"/></font></Label>
+    <Region HBox.hgrow="ALWAYS"/>
+    <Button text="Inicio" onAction="#irInicio" disable="false" minWidth="100"/>
+    <Button text="Clientes" onAction="#irClientes" disable="false" minWidth="100"/>
+    <Button text="Citas" onAction="#irCitas" disable="false" minWidth="100"/>
+    <Button text="Procesos" onAction="#irProcesos" disable="true" minWidth="100"/>
+   </ToolBar>
+  </VBox>
+ </top>
+ <center>
+  <ScrollPane fitToWidth="true">
+   <VBox spacing="18"><padding><Insets top="20" right="28" bottom="20" left="28"/></padding>
+    <VBox spacing="6">
+     <Label text="Monitor de Procesos Concurrentes"><font><Font name="System Bold" size="24"/></font></Label>
+     <Label text="Demostración de tareas en segundo plano con Thread, Runnable y Platform.runLater(). La ventana permanece interactiva mientras se ejecutan los hilos." wrapText="true"/>
+    </VBox>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+     <Button fx:id="btnIniciarTodos" text="▶ Iniciar ambos procesos" onAction="#iniciarTodos" style="-fx-font-weight: bold;"/>
+     <Button fx:id="btnDetenerTodos" text="⏹ Detener todos" onAction="#detenerTodos" disable="true"/>
+     <Button fx:id="btnReiniciarTodos" text="↺ Reiniciar todos" onAction="#reiniciarTodos"/>
+     <Region HBox.hgrow="ALWAYS"/>
+     <Button text="⚠️ Demostrar bloqueo (Paso 6)" onAction="#demostrarBloqueo"/>
+    </HBox>
+
+    <Separator/>
+
+    <HBox spacing="20">
+     <!-- Card Proceso 1: Clientes (100 registros) -->
+     <VBox spacing="12" HBox.hgrow="ALWAYS" style="-fx-border-color: #d0d7de; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 16;">
+      <Label text="1. Procesador de Clientes (100 registros)"><font><Font name="System Bold" size="16"/></font></Label>
+      <Label text="Simula procesamiento por lotes (100 ms por registro en hilo independiente)." wrapText="true"/>
+      <Label fx:id="lblEstadoClientes" text="Esperando inicio"><font><Font name="System Italic" size="13"/></font></Label>
+      <ProgressBar fx:id="barraProgresoClientes" progress="0.0" maxWidth="Infinity" prefHeight="22"/>
+      <HBox alignment="CENTER_RIGHT">
+       <Label fx:id="lblPorcentajeClientes" text="0%"><font><Font name="System Bold" size="14"/></font></Label>
+      </HBox>
+      <HBox spacing="10" alignment="CENTER">
+       <Button fx:id="btnIniciarClientes" text="Iniciar" onAction="#iniciarProcesoClientes" minWidth="80"/>
+       <Button fx:id="btnDetenerClientes" text="Detener" onAction="#detenerProcesoClientes" disable="true" minWidth="80"/>
+       <Button fx:id="btnReiniciarClientes" text="Reiniciar" onAction="#reiniciarProcesoClientes" minWidth="80"/>
+      </HBox>
+     </VBox>
+
+     <!-- Card Proceso 2: Citas Técnicas (50 registros, tiempo diferente) -->
+     <VBox spacing="12" HBox.hgrow="ALWAYS" style="-fx-border-color: #d0d7de; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 16;">
+      <Label text="2. Procesador de Citas Técnicas (50 registros)"><font><Font name="System Bold" size="16"/></font></Label>
+      <Label text="Simula auditoría de servicios (150 ms por registro, velocidad concurrente distinta)." wrapText="true"/>
+      <Label fx:id="lblEstadoCitas" text="Esperando inicio"><font><Font name="System Italic" size="13"/></font></Label>
+      <ProgressBar fx:id="barraProgresoCitas" progress="0.0" maxWidth="Infinity" prefHeight="22"/>
+      <HBox alignment="CENTER_RIGHT">
+       <Label fx:id="lblPorcentajeCitas" text="0%"><font><Font name="System Bold" size="14"/></font></Label>
+      </HBox>
+      <HBox spacing="10" alignment="CENTER">
+       <Button fx:id="btnIniciarCitas" text="Iniciar" onAction="#iniciarProcesoCitas" minWidth="80"/>
+       <Button fx:id="btnDetenerCitas" text="Detener" onAction="#detenerProcesoCitas" disable="true" minWidth="80"/>
+       <Button fx:id="btnReiniciarCitas" text="Reiniciar" onAction="#reiniciarProcesoCitas" minWidth="80"/>
+      </HBox>
+     </VBox>
+    </HBox>
+
+    <Separator/>
+
+    <!-- Consola de logs en tiempo real -->
+    <VBox spacing="8" VBox.vgrow="ALWAYS">
+     <HBox alignment="CENTER_LEFT" spacing="10">
+      <Label text="Consola de eventos de hilos (en tiempo real):"><font><Font name="System Bold" size="14"/></font></Label>
+      <Region HBox.hgrow="ALWAYS"/>
+      <Button text="Limpiar consola" onAction="#limpiarLog"/>
+     </HBox>
+     <TextArea fx:id="txtLog" editable="false" wrapText="true" prefRowCount="8"
+               style="-fx-font-family: monospace; -fx-font-size: 12px;"/>
+    </VBox>
+   </VBox>
+  </ScrollPane>
+ </center>
+ <bottom>
+  <HBox alignment="CENTER_LEFT" spacing="12">
+   <padding><Insets top="10" right="24" bottom="12" left="24"/></padding>
+   <Label fx:id="lblHilosActivos" text="Hilos activos: 0"><font><Font name="System Bold" size="12"/></font></Label>
+   <Separator orientation="VERTICAL"/>
+   <Label text="TecnoAsistencia Nicaragua S.A. — Programación Concurrente (Thread y Runnable)"/>
+  </HBox>
+ </bottom>
+</BorderPane>

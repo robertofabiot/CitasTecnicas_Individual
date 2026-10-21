@@ -59,7 +59,7 @@ class InterfazTest {
 
     @Test void cargaLasCincoVistasSinCssYDesactivaElMenuActual() throws Exception {
         enFx(() -> {
-            for (String vista : List.of("inicio", "clientes", "citas")) {
+            for (String vista : List.of("inicio", "clientes", "citas", "procesos")) {
                 Parent root = cargar(vista + "-view.fxml").getRoot();
                 Stage stage = mostrar(root);
                 try {

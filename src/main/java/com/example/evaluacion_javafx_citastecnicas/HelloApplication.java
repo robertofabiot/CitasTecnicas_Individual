@@ -14,6 +14,10 @@ public class HelloApplication extends Application {
         stage.setTitle("TecnoAsistencia · Gestión de clientes y citas");
         stage.setMinWidth(900);
         stage.setMinHeight(740);
+
+        // Paso 3 de la práctica: Detener de forma controlada los hilos al cerrar la ventana
+        stage.setOnCloseRequest(event -> MenuController.detenerControladorActivo());
+
         stage.show();
     }
 }

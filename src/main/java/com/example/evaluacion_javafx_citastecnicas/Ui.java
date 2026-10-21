@@ -1,7 +1,7 @@
 package com.example.evaluacion_javafx_citastecnicas;
 
 import javafx.beans.binding.Bindings;
-import javafx.concurrent.Task;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -68,29 +68,31 @@ public final class Ui {
 
     public static <T> void ejecutar(Node root, Callable<T> trabajo, Consumer<T> terminado) {
         root.setDisable(true);
-        Task<T> tarea = new Task<>() {
-            @Override protected T call() throws Exception { return trabajo.call(); }
-        };
-        tarea.setOnSucceeded(e -> {
-            root.setDisable(false);
-            terminado.accept(tarea.getValue());
-        });
-        tarea.setOnFailed(e -> {
-            root.setDisable(false);
-            Throwable error = tarea.getException();
-            if (error instanceof IllegalArgumentException) {
-                error(root, error.getMessage());
-            } else if (error instanceof SQLException sql) {
-                String estado = sql.getSQLState();
-                String mensaje = estado != null && estado.startsWith("08")
-                        ? "No hay conexión con PostgreSQL. Revise su conexión de red y database.properties."
-                        : "PostgreSQL no pudo completar la operación. Revise la conexión y las tablas de la base de datos.";
-                error(root, mensaje + (estado == null ? "" : " Código SQL: " + estado));
-            } else {
-                error(root, "Ocurrió un error inesperado al procesar los datos.");
+        Runnable tarea = () -> {
+            try {
+                T resultado = trabajo.call();
+                Platform.runLater(() -> {
+                    root.setDisable(false);
+                    terminado.accept(resultado);
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    root.setDisable(false);
+                    if (e instanceof IllegalArgumentException) {
+                        error(root, e.getMessage());
+                    } else if (e instanceof SQLException sql) {
+                        String estado = sql.getSQLState();
+                        String mensaje = estado != null && estado.startsWith("08")
+                                ? "No hay conexión con PostgreSQL. Revise su conexión de red y database.properties."
+                                : "PostgreSQL no pudo completar la operación. Revise la conexión y las tablas de la base de datos.";
+                        error(root, mensaje + (estado == null ? "" : " Código SQL: " + estado));
+                    } else {
+                        error(root, "Ocurrió un error inesperado al procesar los datos.");
+                    }
+                });
             }
-        });
-        Thread hilo = new Thread(tarea, "consulta-postgresql");
+        };
+        Thread hilo = new Thread(tarea, "Hilo-ConsultaPostgreSQL");
         hilo.setDaemon(true);
         hilo.start();
     }
