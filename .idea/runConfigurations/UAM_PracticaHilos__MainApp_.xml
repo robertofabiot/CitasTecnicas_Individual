@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="UAM PracticaHilos (MainApp)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="ni.edu.uam.practicahilos.MainApp" />
+    <module name="Evaluacion_JavaFX_CitasTecnicas" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TecnoAsistencia (Launcher)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.example.evaluacion_javafx_citastecnicas.Launcher" />
+    <module name="Evaluacion_JavaFX_CitasTecnicas" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
